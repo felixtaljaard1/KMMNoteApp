@@ -26,12 +26,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.myfirstkmmapp.android.note_list.HideableTextField
 import com.example.myfirstkmmapp.android.note_list.NoteItem
 
 @Composable
 fun NoteDetailScreen(
     noteId: Long,
+    navController: NavController,
     viewModel: NoteDetailViewModel = hiltViewModel()
 ){
     val state by viewModel.state.collectAsState()
@@ -39,7 +41,7 @@ fun NoteDetailScreen(
 
     LaunchedEffect(key1 = hasNoteBeenSaved){
         if(hasNoteBeenSaved){
-
+            navController.popBackStack()
         }
     }
 
@@ -82,10 +84,11 @@ fun NoteDetailScreen(
                 isHintVisible = state.isNoteContentHintVisible,
                 onValueChanged = viewModel::onNoteContentChanged,
                 onFocusChanged = {
-                    viewModel.onNoteTitleFocusChanged(it.isFocused)
+                    viewModel.onNoteContentFocusChanged(it.isFocused)
                 },
-                singleLine = true,
-                textStyle = TextStyle(fontSize = 20.sp)
+                singleLine = false,
+                textStyle = TextStyle(fontSize = 20.sp),
+                modifier = Modifier.weight(1f)
             )
         }
     }
